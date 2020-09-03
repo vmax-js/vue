@@ -10,48 +10,77 @@
 </head>
 
 <body>
-    <div id="app">
-        <img :src="imgSrc" alt="">
-        <div :[key]="show">tan</div>
-        <div v-bind="{id:type,'name':key}">tan1</div>
-        <div v-bind:class="{ red: isRed }" class="red">tan2</div>
-        <div v-bind:class="[classA,classB]">tabs</div>
-        <div v-bind:class="[isRed ? '1':'2']">tan3</div>
-        <div v-bind:class="[classA,{classB:show,classC:type}]">tan4</div>
-        <div v-bind:style= "{color:colorObj}">123</div>
-        <div v-bind:style="color1">344</div>
-        <div v-bind:style="[color1,color2]">232434</div>
-        <div v-bind:style="{display:['-webkit-box','-ms-flexbox','flex']}">12</div>
-        <svg v-bind:view-box.camel="viewbox">11</svg>
-        <div v-bind:text-content.prop="text"></div>
+    <!-- v-on监听DOM事件 -->
+    <!-- <div id="app">
+        <button v-on:click="count += 1">点击加1</button>
+        <p>被点击了 {{ count }} 次</p>
     </div>
 
     <script>
         const vm = new Vue({
             el: '#app',
             data: {
-                show: '1',
-                type: 0,
-                imgSrc: 'https://fanyiapp.cdn.bcebos.com/cms/image/3d09db8606326410d81da70c064bb79e.jpg',
-                key: 'test',
-                isRed: true,
-                classA: 'a',
-                classB: 'b',
-                colorObj: 'red',
-                color1:{
-                    color:'red',
-                    fontSize:'30px',
-                    width:'200px',
-                    height:'300px'
-                },
-                color2:{
-                    cursor:"pointer"
-                },
-                viewbox:'0 0 100 100',
-                text:"dfdfd"
+                count: 0
+            }
+        }) -->
 
+
+
+
+    <!-- 使用函数 -->
+    <!-- <div id="app">
+        点击button才会执行 传递参数和事件源
+        <button v-on:click="addCount(5,$event)">点击加1</button>
+        <p>被点击了 {{ count }} 次</p>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                count: 0
+            },
+            methods: {
+                addCount(num,e) {
+                    //this为 Vue实例对象
+                    this.count += num;
+                    //相互调用
+                    this.a(); //a
+                    //事件源
+                    console.log(e.target); //<button>点击加1</button>
+                },
+                a(){
+                    console.log("a");
+                }
             }
         })
+    </script> -->
+
+
+    <div id="app">
+        <!-- 动态获取事件名 -->
+        <!-- 不能传参 -->
+        <!-- <button v-on="{click:addCount}"></button> -->
+        <!-- v-on:click -> @click -->
+        <!-- <button v-on:[event]="addCount(5,$event)">点击加1</button> -->
+        <button @[event]="addCount(5,$event)">点击加1</button>
+        <p>点击了{{ count }}次</p>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data:{
+                count: 0,
+                event: "click"
+            },
+            methods:{
+                addCount(num, e){
+                    this.count += num;
+                    console.log(e.target);
+                }
+            }
+        })
+
     </script>
 </body>
 
