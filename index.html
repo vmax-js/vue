@@ -10,54 +10,198 @@
 </head>
 
 <body>
-    <div id="app">
-        <!-- <div @click="alert('div')" :style="{backgroundColor:'red'}">
-                阻止事件冒泡
-                <button @click.stop="alert('button')">btn</button>
-        </div> -->
-
-        <!-- .prevent 阻止默认事件 -->
-        <!-- <form @submit.prevent="onSubmit">
-            <input type="submit">
-        </form> -->
-
-        <!-- .capture 事件捕获 先触发父元素的事件-->
-        <!-- <div @click.capture="alert('div')" :style="{backgroundColor:'red'}">
-            <button @click="alert('button')">btn</button>
-        </div> -->
-
-        <!-- .self 只有点击了才算 冒泡捕获不算 -->
-        <!-- <div @click.capture.self="alert('div')" :style="{backgroundColor:'red'}">
-                <button @click="alert('button')">btn</button>
-            </div> -->
-
-
-        <!-- <div @click.self="alert('div')" :style="{backgroundColor:'red'}">
-            <button @click="alert('button')">btn</button>
-        </div> -->
-
-        <!-- .once 只执行一次 2.1.4+-->
-        <!-- <div @click.once="alert('div')" :style="{backgroundColor:'red'}">
-            <button @click="alert('button')">btn</button>
-        </div> -->
-
-        <!-- .passive 设置addEventListener -->
-        <!-- 按会车健 按键修饰符 -->
-        <input type="text" @keyup.enter="onSubmit">
+    <!-- v-for 中in或者of -->
+    <!-- 1 使用数组 -->
+    <!-- <div id="app">
+      <ul>
+          <li v-for="(person,index) in persons">
+              {{ person }} -- {{ index }}
+          </li>
+      </ul>
     </div>
     <script>
         const vm = new Vue({
             el: "#app",
+           data:{
+               persons:["one","two","three"]
+           }
+        })
+    </script> -->
 
-            methods: {
-                alert(str) {
-                    alert(str);
-                },
-                onSubmit() {
-                    console.log("a");
+    ---------------------------------------------------------
+    <!-- 2 使用数组 对象-->
+    <!-- <div id="app">
+        <ul>
+            <li v-for="(person,index) in persons">
+                {{ person.name }} -- {{person.age}} -- {{ index }}
+               
+            </li>
+            <li v-for="(value,key,index) of tan">
+                {{ value }} --- {{ key }} -- {{ index }}
+            </li>
+        </ul>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                persons: [{
+                        name: 'tan',
+                        age: 23
+                    },
+                    {
+                        name: "bi",
+                        age: 22
+                    },
+                    {
+                        name: "ttt",
+                        age: 30
+                    }
+                ],
+                tan:{
+                    name:'tan',
+                    age: 233,
+                    id: 2333
                 }
             }
         })
+    </script> -->
+    ---------------------------------------------------------
+
+    <!-- <div id="app">
+        <ul>
+            <li v-for="item of 10 ">{{ item }}</li>
+            <li v-for="item in 'tscn' ">{{ item }}</li>
+        </ul>
+
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data:{
+            }
+        })
+    
+    
+    </script> -->
+
+    ---------------------------------------------------------
+
+    <!-- <div id="app">
+        <template v-for="person in persons">
+            <li>{{ person.name }}</li>
+            <span>{{ person.age }}</span>
+        </template>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                persons: [{
+                        name: "谭彪",
+                        age: 23
+                    },
+                    {
+                        name: "老毕",
+                        age: 22
+                    },
+                    {
+                        name: "老王",
+                        age: 21
+                    }
+                ]
+            }
+        })
+    </script> -->
+    ---------------------------------------------------------
+
+    <!-- <div id="app">
+        <ul>
+                <button @click="handleClick">反转</button>
+
+            <li v-for = "(person,index) in persons" :key="person.name">
+                {{person.name}}
+                <input type="text">
+                <button @click="handleClick(index)">下移</button>
+            </li>
+        </ul>
+
+        <button @click="show = !show">{{show ? '显示':'隐藏'}}</button>
+        <input type="text" v-if='show' key='a'>
+        <input type="text" v-else key='b'>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data:{
+                persons:[{
+                    name: "谭彪",
+                    age: 23
+                },
+                {
+                    name:"毕红庆",
+                    age: 21
+                },
+                {
+                    name: "王信尧",
+                    age: 22
+                },
+             
+            ],
+            show: true
+            },
+            methods:{
+                handleClick(index){
+                    // console.log(index)
+                    //删除
+                    // const deleteItem = this.persons.splice(index,1);
+                    // console.log(deleteItem);
+                    //插入
+                    // this.persons.splice(index+1,0,...deleteItem);
+                    this.persons.reverse();
+                }
+            }
+        })
+    </script> -->
+
+
+
+
+    <div id="app">
+        <ul>
+            <li v-for="person in personsActive">{{ person.name }}</li>
+        </ul>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data:{
+                persons:[{
+                    name:"tan",
+                    age: 23,
+                    isActive: true
+                },
+                {
+                    name:"bi",
+                    age: 22,
+                    isActive: false
+                },
+                {
+                    name:"wang",
+                    age: 21,
+                    isActive: false
+                },
+                {
+                    name:"du",
+                    age: 20,
+                    isActive: true
+                }, 
+            ],
+            personsActive:[],
+            }
+            
+        })
+        vm.personsActive = vm.persons.filter(item => item.isActive);
     </script>
 </body>
 
