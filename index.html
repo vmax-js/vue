@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <img :src="imgSrc" alt="">
+        <div :[key]="show">tan</div>
+        <div v-bind="{id:type,'name':key}">tan1</div>
+        <div v-bind:class="{ red: isRed }" class="red">tan2</div>
+        <div v-bind:class="[classA,classB]">tabs</div>
+        <div v-bind:class="[isRed ? '1':'2']">tan3</div>
+        <div v-bind:class="[classA,{classB:show,classC:type}]">tan4</div>
+        <div v-bind:style= "{color:colorObj}">123</div>
+        <div v-bind:style="color1">344</div>
+        <div v-bind:style="[color1,color2]">232434</div>
+        <div v-bind:style="{display:['-webkit-box','-ms-flexbox','flex']}">12</div>
+        <svg v-bind:view-box.camel="viewbox">11</svg>
+        <div v-bind:text-content.prop="text"></div>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                show: '1',
+                type: 0,
+                imgSrc: 'https://fanyiapp.cdn.bcebos.com/cms/image/3d09db8606326410d81da70c064bb79e.jpg',
+                key: 'test',
+                isRed: true,
+                classA: 'a',
+                classB: 'b',
+                colorObj: 'red',
+                color1:{
+                    color:'red',
+                    fontSize:'30px',
+                    width:'200px',
+                    height:'300px'
+                },
+                color2:{
+                    cursor:"pointer"
+                },
+                viewbox:'0 0 100 100',
+                text:"dfdfd"
+
+            }
+        })
+    </script>
+</body>
+
+</html>
