@@ -10,77 +10,54 @@
 </head>
 
 <body>
-    <!-- v-on监听DOM事件 -->
-    <!-- <div id="app">
-        <button v-on:click="count += 1">点击加1</button>
-        <p>被点击了 {{ count }} 次</p>
-    </div>
-
-    <script>
-        const vm = new Vue({
-            el: '#app',
-            data: {
-                count: 0
-            }
-        }) -->
-
-
-
-
-    <!-- 使用函数 -->
-    <!-- <div id="app">
-        点击button才会执行 传递参数和事件源
-        <button v-on:click="addCount(5,$event)">点击加1</button>
-        <p>被点击了 {{ count }} 次</p>
-    </div>
-
-    <script>
-        const vm = new Vue({
-            el: '#app',
-            data: {
-                count: 0
-            },
-            methods: {
-                addCount(num,e) {
-                    //this为 Vue实例对象
-                    this.count += num;
-                    //相互调用
-                    this.a(); //a
-                    //事件源
-                    console.log(e.target); //<button>点击加1</button>
-                },
-                a(){
-                    console.log("a");
-                }
-            }
-        })
-    </script> -->
-
-
     <div id="app">
-        <!-- 动态获取事件名 -->
-        <!-- 不能传参 -->
-        <!-- <button v-on="{click:addCount}"></button> -->
-        <!-- v-on:click -> @click -->
-        <!-- <button v-on:[event]="addCount(5,$event)">点击加1</button> -->
-        <button @[event]="addCount(5,$event)">点击加1</button>
-        <p>点击了{{ count }}次</p>
+        <!-- <div @click="alert('div')" :style="{backgroundColor:'red'}">
+                阻止事件冒泡
+                <button @click.stop="alert('button')">btn</button>
+        </div> -->
+
+        <!-- .prevent 阻止默认事件 -->
+        <!-- <form @submit.prevent="onSubmit">
+            <input type="submit">
+        </form> -->
+
+        <!-- .capture 事件捕获 先触发父元素的事件-->
+        <!-- <div @click.capture="alert('div')" :style="{backgroundColor:'red'}">
+            <button @click="alert('button')">btn</button>
+        </div> -->
+
+        <!-- .self 只有点击了才算 冒泡捕获不算 -->
+        <!-- <div @click.capture.self="alert('div')" :style="{backgroundColor:'red'}">
+                <button @click="alert('button')">btn</button>
+            </div> -->
+
+
+        <!-- <div @click.self="alert('div')" :style="{backgroundColor:'red'}">
+            <button @click="alert('button')">btn</button>
+        </div> -->
+
+        <!-- .once 只执行一次 2.1.4+-->
+        <!-- <div @click.once="alert('div')" :style="{backgroundColor:'red'}">
+            <button @click="alert('button')">btn</button>
+        </div> -->
+
+        <!-- .passive 设置addEventListener -->
+        <!-- 按会车健 按键修饰符 -->
+        <input type="text" @keyup.enter="onSubmit">
     </div>
     <script>
         const vm = new Vue({
             el: "#app",
-            data:{
-                count: 0,
-                event: "click"
-            },
-            methods:{
-                addCount(num, e){
-                    this.count += num;
-                    console.log(e.target);
+
+            methods: {
+                alert(str) {
+                    alert(str);
+                },
+                onSubmit() {
+                    console.log("a");
                 }
             }
         })
-
     </script>
 </body>
 
