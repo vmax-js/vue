@@ -12,17 +12,25 @@
 
 <body>
     <div id="app">
-        <div class="goods" v-for="goods in goodsList" :key="goods.id">
+        <div class="goods" v-for="(goods,goodsIndex) in goodsList" :key="goods.id">
                <div class="title"> {{ goods.title }}: </div>
                <ul class="type-list"> 
-                   <li class="type"  v-for="type in goods.typeList" :key="type">{{ type }}</li>
+                   <li class="type"  :class="{active: typeIndex === goods.index}" 
+                    v-for="(type,typeIndex) in goods.typeList" :key="type"
+                    @click="handleClick(typeIndex,goods,type,goodsIndex)"
+                    >{{ type }}</li>
                </ul>
         </div>
        <div class="choose-type">
            <div>已选条件:</div>
-           <span class="no-goods">暂时没有选择过滤条件</span>
-           <ul class="filter-list">
-               <li></li>
+           <span class="no-goods" v-if="!filterListGoods">暂时没有选择过滤条件</span>
+           <ul class="filter-list" v-else>
+               <li v-for="(goods,index) in filterList">
+                   {{ goods }}
+                   <span class="delete-goods"
+                        @click = "deleteFilterGoods(index)"
+                   >x</span>
+                </li>
            </ul>
        </div>
     </div>
@@ -30,6 +38,8 @@
         const vm = new Vue({
             el: '#app',
             data: {
+                filterList:{},
+                filterListGoods:false,
                 goodsList: [{
                         title: '上装',
                         typeList: ['全部', '针织衫', '毛呢外套', 'T恤', '羽绒服', '棉衣', '卫衣', '风衣'],
@@ -46,8 +56,38 @@
                         id: 3,
                     }
                 ]
+            },
+            methods:{
+                handleClick(typeIndex,goods,type,goodsIndex){
+                    // console.log(typeIndex,goods);
+                    if(type === '全部'){
+                        return;
+                    }
+                    this.filterListGoods = true;
+                    goods.index = typeIndex;
+                    vm.$set(this.filterList,goodsIndex,type);
+                    // this.filterList.splice(goodsIndex,1,type);
+                    console.log(this.filterList,goodsIndex);
+                    
+                },
+                deleteFilterGoods(index){
+                    this.$delete(this.filterList,index);
+                    this.goodsList[index].index = 0;
+                    this.changeShowFilter();
+                },
+                changeShowFilter(){
+                    const filterListStr = JSON.stringify(this.filterList);
+                    if(filterListStr === '{}'){
+                        this.filterListGoods = false;
+                    }
+                }
+
             }
         })
+        vm.goodsList.forEach(item => {
+            vm.$set(item,'index',0);
+        });
+        // console.log(vm.goodsList); 
     </script>
 </body>
 
