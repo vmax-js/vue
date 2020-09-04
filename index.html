@@ -11,14 +11,14 @@
 
 <body>
     <div id="app">
-        <input type="text" v-model.number="num1">
+        <input type="text" v-model.number.lazy="num1">
         <select v-model="type">
             <option value="+">+</option>
             <option value="-">-</option>
             <option value="*">*</option>
             <option value="/">/</option>
         </select>
-        <input type="text" v-model.number="num2">
+        <input type="text" v-model.number.lazy="num2">
         <button @click="handleClick">=</button>
         <span>{{ result }}</span>
     </div>
