@@ -7,106 +7,59 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="./vue.js"></script>
-    <link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
     <div id="app">
-        <div class="header">
-            <div class="container">
-                <div class="logo">toDoList</div>
-                <div class="input-area">
-                    <input type="text" @input="handleInput" :value="curMask">
-                    <button @click="addMask">添加</button>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <h2>
-                <span>正在进行</span>
-                <span class="mask-num">{{ needList.length }}</span>
-            </h2>
-            <ul class="mask-list">
+        <!-- <input type="text" v-model="msg"/> -->
+        <!-- <input type="number"> -->
+        <!-- <input type="checkbox" v-model="checked"> -->
 
-                <li v-for="(mask,maskIndex) in needList" :key="mask.id">
-                    <div>
-                        <input type="checkbox" @change="checkhandle(maskIndex,'need')">
-                        <span>{{ mask.title }}</span>
-                    </div>
-                    <button @click="deleteMask(maskIndex)">删除</button>
-                </li>
-            </ul>
 
-        </div>
-        <div class="container">
-            <h2>
-                <span>已经完成</span>
-                <span class="mask-num">{{ deleteList.length }}</span>
-            </h2>
-            <ul class="mask-list complete-list">
-                <li v-for="(mask,maskIndex) in deleteList" :key="mask.id">
-                    <div>
-                        <input type="checkbox" @change="checkhandle(maskIndex,'complete')">
-                        <span>{{ mask.title }}</span>
-                    </div>
-                    <button>删除</button>
-                </li>
-            </ul>
-        </div>
+        <!-- <input type="checkbox"  id="ping" value="苹果" v-model="checkList">
+       <label for="ping">苹果</label>
+       <input type="checkbox"  id="xiang" value="香蕉" v-model="checkList">
+       <label for="xiang">香蕉</label>
+       <input type="checkbox"  id="li" value="荔枝" v-model="checkList">
+       <label for="li">荔枝</label> -->
+
+        <!-- <input type="radio"  id="ping" value="苹果" v-model="checkStr">
+       <label for="ping">苹果</label>
+       <input type="radio"  id="xiang" value="香蕉" v-model="checkStr">
+       <label for="xiang">香蕉</label>
+       <input type="radio"  id="li" value="荔枝" v-model="checkStr">
+       <label for="li">荔枝</label> -->
+
+        <!-- <textarea v-model="multiple"></textarea> -->
+
+        <!-- <select v-model="selectList" multiple>
+        <option value="tan">tan</option>
+        <option value="tan1">tan1</option>
+        <option value="tan2">tan2</option>
+       </select> -->
+
+        <!-- <select v-model="select">
+            <option value="请选择" disabled>请选择</option>
+            <option value="tan">tan</option>
+            <option value="tan1">tan1</option>
+            <option value="tan2">tan2</option>
+        </select> -->
+
+        <!-- <input type="text" v-model.lazy="msg"> -->
+        <!-- <input type="text" v-model.number="msg"> -->
+        <!-- <input type="text" v-model.trim="msg"> -->
     </div>
-
     <script>
         const vm = new Vue({
             el: "#app",
             data: {
-                curMask: '',
-                needList: [{
-                    title: '吃饭',
-                    id: 0
-                }, {
-                    title: '睡觉',
-                    id: 1
-                }, {
-                    title: '打豆豆',
-                    id: 2
-                }],
-                deleteList: []
-            },
-            methods: {
-                handleInput(e) {
-                    this.curMask = e.target.value;
-
-                },
-                addMask() {
-                    if (this.curMask === '') {
-                        alert("please input toDoList!")
-                        return;
-                    }
-                    const addObj = {};
-                    addObj.title = this.curMask;
-                    addObj.id = this.needList.length + 1;
-
-                    this.needList.push(addObj);
-                    // console.log(this.needList);
-                    this.curMask = '';
-                },
-                deleteMask(maskIndex) {
-                    // console.log(this.needList,maskIndex)
-                    // console.log(this.needList)
-                    // this.$delete(this.needList, maskIndex);
-                    this.needList.splice(maskIndex, 1);
-                    console.log(this.needList);
-                },
-                checkhandle(maskIndex, type) {
-                    if (type === 'need') {
-                        const deleteMask = this.needList.splice(maskIndex, 1);
-                        this.deleteList.push(...deleteMask);
-                    } else {
-                        const needMask = this.deleteList.splice(maskIndex,1);
-                        this.needList.push(...needMask);
-                    }
-
-                }
+                msg: "hello word",
+                checked: true,
+                checkList: [],
+                checkStr: '',
+                multiple: 'hello，你好啊',
+                select: "请选择",
+                selectList: []
             }
         })
     </script>
