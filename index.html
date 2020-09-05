@@ -7,57 +7,98 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="./vue.js"></script>
+    <link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
     <div id="app">
-        <input type="text" v-model.number.lazy="num1">
-        <select v-model="type">
-            <option value="+">+</option>
-            <option value="-">-</option>
-            <option value="*">*</option>
-            <option value="/">/</option>
-        </select>
-        <input type="text" v-model.number.lazy="num2">
-        <button @click="handleClick">=</button>
-        <span>{{ result }}</span>
-    </div>
+        <div class="area" v-for="area in 2">
+            <h2>{{ area===1 ? '提问区':'展示区'}}</h2>
+            <ul>
+                <li v-for="question in questionList" :key='question.id'>
+                    <h3>{{ question.title }}</h3>
+                    <!-- 简答 -->
+                    <div v-if="question.type === 'short'">
+                        <input type="text" v-if="area===1 " v-model="question.answer">
+                        <p v-else>{{question.answer}}</p>
+                    </div>
+                    <!-- 单选 -->
+                    <div v-else-if="question.type === 'single'">
+                        <template v-if="area === 1">
+                            <div v-for="choose in question.chooseList" :key="choose">
+                                <input type="radio" :value="choose" v-model="question.answer"/>
+                                <span>{{ choose }}</span>
+                            </div>
+                        </template>
+                        <span v-else>{{ question.answer }}</span>
+                    </div>
+                    <!-- 多选 -->
+                    <div v-else-if="question.type === 'multiple'">
+                        <template v-if="area === 1">
+                            <div v-for="choose in question.chooseList" :key="choose">
+                                <input type="checkbox" :value="choose" v-model="question.answer"/>
+                                <span>{{choose}}</span>
+                            </div>
+                        </template>
+                        <span v-else>{{ question.answer.toString() }}</span>
+                    </div>
+                    <!-- 简答 -->
+                    <div v-else-if="question.type === 'long'">
+                        <template v-if="area === 1">
+                            <textarea  cols="30" rows="10" v-model="question.answer"></textarea>
+                        </template>
+                        <span v-else>{{question.answer}}</span>
+                    </div>
 
+                </li>
+            </ul>
+        </div>
+    </div>
     <script>
         const vm = new Vue({
-            el: "#app",
+            el: '#app',
             data: {
-                num1: 0,
-                num2: 0,
-                type: '+',
-                result: 0
-            },
-            methods: {
-                handleClick() {
-                    const {
-                        num1,
-                        num2,
-                        type
-                    } = this;
-                    switch (type) {
-                        case '+':
-                            this.result = num1 + num2;
-                            break;
-                        case '-':
-                            this.result = num1 - num2;
-                            break;
-                        case '*':
-                            this.result = num1 * num2;
-                            break;
-                        case '/':
-                            this.result = num1 / num2;
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                questionList: [{
+                        type: 'short',
+                        title: '1.请问你的姓名是？',
+                        chooseList: null,
+                        answer: '',
+                        id: 0
+                    },
+                    {
+                        type: 'single',
+                        title: '2.请问您的性别是？',
+                        chooseList: [
+                            '男',
+                            '女',
+                            '保密',
+                        ],
+                        answer: '',
+                        id: 1,
+                    },
+                    {
+                        type: 'multiple',
+                        title: '3. 请选择您的兴趣爱好：',
+                        chooseList: [
+                            '看书',
+                            '游泳',
+                            '跑步',
+                            '看电影',
+                            '听音乐',
+                        ],
+                        answer: [],
+                        id: 2,
+                    },
+                    {
+                        type: 'long',
+                        title: '4. 请介绍一下自己:',
+                        chooseList: null,
+                        answer: '',
+                        id: 3,
+                    },
+                ]
             }
-        });
+        })
     </script>
 </body>
 
