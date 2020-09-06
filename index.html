@@ -6,26 +6,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+
     <script src="./vue.js"></script>
+    <script src="./jquery.js"></script>
 </head>
 
 <body>
     <div id="app">
-        {{ msg }}
+        <div class="logo"><img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+                title="点击一下,了解更多"></div>
+        <div class="search-box">
+            <div class="search-area">
+                <input type="text" maxlength="100" v-model="inputValue" @focus="() => inputFocus = true"
+                    @blur="() => inputFocus = false">
+                <div class="icon icon-paizhao"></div>
+            </div>
+            <div class="search-btn">百度一下</div>
+        </div>
+        <ul class="search-list" v-show="inputFocus && inputValue.length">
+            <li v-for="res in resList" :key="res">{{ res }}</li>
+        </ul>
     </div>
     <script>
         const vm = new Vue({
             el: '#app',
-            data:{
-                msg:'hello'
+            data: {
+                inputFocus: false,
+                inputValue: '',
+                resList: []
             },
-            watch:{
-                msg:function(newVal,oldVal){
-                    console.log(newVal,oldVal);
+            methods: {
+                searchRes(res) {
+                    if (res.s) {
+                        this.resList = res.s;
+                    } else {
+                        return;
+                    }
+                }
+            },
+            watch: {
+                inputValue() {
+                    if (this.inputValue) {
+                        $.ajax({
+                            dataType: 'jsonp',
+                            url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+                            data: {
+                                wd: this.inputValue,
+                                //全局找 成功的回调函数
+                                cb: 'vm.searchRes',
+                            }
+                        })
+                    }
+
+                    // console.log(this.inputValue);
                 }
             }
         })
-    
     </script>
 </body>
 
