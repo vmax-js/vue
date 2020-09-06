@@ -9,59 +9,86 @@
     <link rel="stylesheet" href="./index.css">
 
     <script src="./vue.js"></script>
-    <script src="./jquery.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script> -->
+    <script src="./vue-resource.js"></script>
 </head>
 
 <body>
     <div id="app">
-        <div class="logo"><img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
-                title="点击一下,了解更多"></div>
-        <div class="search-box">
-            <div class="search-area">
-                <input type="text" maxlength="100" v-model="inputValue" @focus="() => inputFocus = true"
-                    @blur="() => inputFocus = false">
-                <div class="icon icon-paizhao"></div>
-            </div>
-            <div class="search-btn">百度一下</div>
+        <div class="username">
+            <input type="text" placeholder="用户名" v-model='name'>
         </div>
-        <ul class="search-list" v-show="inputFocus && inputValue.length">
-            <li v-for="res in resList" :key="res">{{ res }}</li>
+        <div class="mail">
+            <input type="text" placeholder="邮箱" v-model='mail'>
+        </div>
+        <div class="upload-btn" @click="handleUpload">提交</div>
+        <div class="test-btn" @click="handleTest">测试jsonp</div>
+        <div class="show-btn" @click="showPerson">显示人物信息</div>
+        <ul class="person-list" v-if="personList.length">
+            <li class="person" v-for="person in personList">
+                <span>{{person.name}}</span>
+                <span>{{person.mail}}</span>
+            </li>
         </ul>
     </div>
     <script>
         const vm = new Vue({
             el: '#app',
             data: {
-                inputFocus: false,
-                inputValue: '',
-                resList: []
+                name: '',
+                mail: '',
+                msg: '',
+                personList: []
             },
             methods: {
-                searchRes(res) {
-                    if (res.s) {
-                        this.resList = res.s;
-                    } else {
-                        return;
-                    }
+                handleUpload() {
+                    // console.log(this.name,this.mail);
+                    this.$http.post('https://developer.duyiedu.com/vue/setUserInfo', {
+                        name: this.name,
+                        mail: this.mail
+                    //成功
+                    }).then(res => {
+                        this.msg = res.body.msg;
+                    //失败
+                    }).catch(err =>{
+                        // console.log(err);
+                        this.msg = err.body.msg;
+                    })
+                },
+                showPerson(){
+                    this.$http.get('https://developer.duyiedu.com/vue/getUserInfo').then(res =>{
+                        this.personList = res.body.data;
+                        console.log(this.personList);
+                    })
+                },
+                handleTest(){
+                    // this.$http.jsonp('https://developer.duyiedu.com/vue/jsonp',{
+                    //     jsonp:'callback'
+                    // }).then(res => {
+                    //     console.log(res);
+                    // })
+
+                    this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
+                        params:{
+                            wd:'tscn'
+                        },
+                        jsonp:'cb'
+                    }).then(res => {
+                        console.log(res);
+                    })
                 }
             },
             watch: {
-                inputValue() {
-                    if (this.inputValue) {
-                        $.ajax({
-                            dataType: 'jsonp',
-                            url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
-                            data: {
-                                wd: this.inputValue,
-                                //全局找 成功的回调函数
-                                cb: 'vm.searchRes',
-                            }
-                        })
+                msg() {
+                    if(this.msg == ''){
+                        return;
                     }
-
-                    // console.log(this.inputValue);
+                    alert(this.msg);
+                    this.msg = '';
                 }
             }
+
+
         })
     </script>
 </body>
