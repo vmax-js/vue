@@ -7,10 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
-
+    <script src="./axios.js"></script>
     <script src="./vue.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script> -->
-    <script src="./vue-resource.js"></script>
+   
 </head>
 
 <body>
@@ -22,7 +21,6 @@
             <input type="text" placeholder="邮箱" v-model='mail'>
         </div>
         <div class="upload-btn" @click="handleUpload">提交</div>
-        <div class="test-btn" @click="handleTest">测试jsonp</div>
         <div class="show-btn" @click="showPerson">显示人物信息</div>
         <ul class="person-list" v-if="personList.length">
             <li class="person" v-for="person in personList">
@@ -32,6 +30,10 @@
         </ul>
     </div>
     <script>
+        axios.defaults.baseURL = 'https://developer.duyiedu.com/vue';
+        const post = axios.create({
+            baseURL : 'https://developer.duyiedu.com/vue'
+        })
         const vm = new Vue({
             el: '#app',
             data: {
@@ -42,41 +44,57 @@
             },
             methods: {
                 handleUpload() {
-                    // console.log(this.name,this.mail);
-                    this.$http.post('https://developer.duyiedu.com/vue/setUserInfo', {
-                        name: this.name,
-                        mail: this.mail
-                    //成功
-                    }).then(res => {
-                        this.msg = res.body.msg;
-                    //失败
-                    }).catch(err =>{
-                        // console.log(err);
-                        this.msg = err.body.msg;
-                    })
-                },
-                showPerson(){
-                    this.$http.get('https://developer.duyiedu.com/vue/getUserInfo').then(res =>{
-                        this.personList = res.body.data;
-                        console.log(this.personList);
-                    })
-                },
-                handleTest(){
-                    // this.$http.jsonp('https://developer.duyiedu.com/vue/jsonp',{
-                    //     jsonp:'callback'
+                    // // console.log(this.name,this.mail);
+                    // this.$http.post('https://developer.duyiedu.com/vue/setUserInfo', {
+                    //     name: this.name,
+                    //     mail: this.mail
+                    // //成功
+                    // }).then(res => {
+                    //     this.msg = res.body.msg;
+                    // //失败
+                    // }).catch(err =>{
+                    //     // console.log(err);
+                    //     this.msg = err.body.msg;
+                    // })
+                    const {name,mail} = this;
+                    // axios({
+                    //     method: 'post',
+                    //     url:'https://developer.duyiedu.com/vue/setUserInfo',
+                    //     data:{
+                    //         name ,
+                    //         mail 
+                    //     }
+                    // }).then(res => {
+                    //     this.msg = res.data.msg;
+                    // })
+                    // axios.post('/setUserInfo',{
+                    //     name,mail
+                    // }).then(res => {
+                    //     this.msg = res.data.msg;
+                    // })
+                    // post.post('/setUserInfo',{
+                    //     name,mail
                     // }).then(res => {
                     //     console.log(res);
+                    //     this.msg = res.data.msg;
                     // })
-
-                    this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
-                        params:{
-                            wd:'tscn'
-                        },
-                        jsonp:'cb'
-                    }).then(res => {
-                        console.log(res);
-                    })
-                }
+                },
+                showPerson(){
+                    // this.$http.get('https://developer.duyiedu.com/vue/getUserInfo').then(res =>{
+                    //     this.personList = res.body.data;
+                    //     console.log(this.personList);
+                    // })
+                    const {name, mail} = this;
+                    axios.all([
+                        axios.post('/setUserInfo',{name,mail}),
+                        axios.get('/getUserInfo')
+                    ]).then(axios.spread((postRes,getRes) => {
+                        this.personList = getRes.data.data;
+                        // console.log(this.personList);   
+                        console.log(postRes);
+                        console.log(getRes);
+                    }))
+                },
             },
             watch: {
                 msg() {
