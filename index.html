@@ -34,6 +34,17 @@
         const post = axios.create({
             baseURL : 'https://developer.duyiedu.com/vue'
         })
+        const interceptors = axios.interceptors.request.use(config =>{
+            return config;
+        })
+        // 移除
+        axios.interceptors.eject(interceptors);
+
+        const source = axios.CancelToken.source();
+        axios.get('url',{
+            cancelToken: source.token
+        })
+        source.cancel();
         const vm = new Vue({
             el: '#app',
             data: {
@@ -44,56 +55,10 @@
             },
             methods: {
                 handleUpload() {
-                    // // console.log(this.name,this.mail);
-                    // this.$http.post('https://developer.duyiedu.com/vue/setUserInfo', {
-                    //     name: this.name,
-                    //     mail: this.mail
-                    // //成功
-                    // }).then(res => {
-                    //     this.msg = res.body.msg;
-                    // //失败
-                    // }).catch(err =>{
-                    //     // console.log(err);
-                    //     this.msg = err.body.msg;
-                    // })
-                    const {name,mail} = this;
-                    // axios({
-                    //     method: 'post',
-                    //     url:'https://developer.duyiedu.com/vue/setUserInfo',
-                    //     data:{
-                    //         name ,
-                    //         mail 
-                    //     }
-                    // }).then(res => {
-                    //     this.msg = res.data.msg;
-                    // })
-                    // axios.post('/setUserInfo',{
-                    //     name,mail
-                    // }).then(res => {
-                    //     this.msg = res.data.msg;
-                    // })
-                    // post.post('/setUserInfo',{
-                    //     name,mail
-                    // }).then(res => {
-                    //     console.log(res);
-                    //     this.msg = res.data.msg;
-                    // })
+                   
                 },
                 showPerson(){
-                    // this.$http.get('https://developer.duyiedu.com/vue/getUserInfo').then(res =>{
-                    //     this.personList = res.body.data;
-                    //     console.log(this.personList);
-                    // })
-                    const {name, mail} = this;
-                    axios.all([
-                        axios.post('/setUserInfo',{name,mail}),
-                        axios.get('/getUserInfo')
-                    ]).then(axios.spread((postRes,getRes) => {
-                        this.personList = getRes.data.data;
-                        // console.log(this.personList);   
-                        console.log(postRes);
-                        console.log(getRes);
-                    }))
+                    
                 },
             },
             watch: {
