@@ -12,15 +12,62 @@
 
 <body>
     <div id="app">
-       {{}}
+       {{ msg }}
     </div>
     <script>
         const vm = new Vue({
             el: '#app',
-            template:`<div id="app-10"> </div>`
-        })
+            data:{
+                msg:'hell word'
+            },
+            watch:{
+                msg:{
+                    handler(){
+                        console.log('监听');
+                    }
+                }
+            },
+            beforeCreate(){
+                console.log(this.msg);
+                console.log('-----beforeCreate----');
+            },
+            created(){
+                console.log(this.msg);
+                this.msg = 'tan';
+                console.log('----created-----');
+            },
+            beforeMount(){
+                console.log(this.$el.outerHTML);
+                console.log('----beforeMount---')
+            },
+            mounted(){
+                console.log(this.$el.outerHTML);
+                console.log('----mount---')
+            },
+            beforeUpdate(){
+                console.log(this.msg);
+                console.log(this.$el);
+                console.log('------beforeUpdate----')
+            },
+            updated(){
+                console.log(this.msg);
+                console.log(this.$el);
+                console.log('----updated')
+            },
+            beforeDestory(){
 
-        
+            },
+            destoryed(){
+                
+            }
+
+
+
+
+
+
+        })
+        vm.msg = 'dfdf';        
     </script>
 </body>
 
