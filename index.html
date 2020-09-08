@@ -6,73 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="./index.css">
-    <script src="./axios.js"></script>
     <script src="./vue.js"></script>
    
 </head>
 
 <body>
     <div id="app">
-        <div class="username">
-            <input type="text" placeholder="用户名" v-model='name'>
-        </div>
-        <div class="mail">
-            <input type="text" placeholder="邮箱" v-model='mail'>
-        </div>
-        <div class="upload-btn" @click="handleUpload">提交</div>
-        <div class="show-btn" @click="showPerson">显示人物信息</div>
-        <ul class="person-list" v-if="personList.length">
-            <li class="person" v-for="person in personList">
-                <span>{{person.name}}</span>
-                <span>{{person.mail}}</span>
-            </li>
-        </ul>
+       {{}}
     </div>
     <script>
-        axios.defaults.baseURL = 'https://developer.duyiedu.com/vue';
-        const post = axios.create({
-            baseURL : 'https://developer.duyiedu.com/vue'
-        })
-        const interceptors = axios.interceptors.request.use(config =>{
-            return config;
-        })
-        // 移除
-        axios.interceptors.eject(interceptors);
-
-        const source = axios.CancelToken.source();
-        axios.get('url',{
-            cancelToken: source.token
-        })
-        source.cancel();
         const vm = new Vue({
             el: '#app',
-            data: {
-                name: '',
-                mail: '',
-                msg: '',
-                personList: []
-            },
-            methods: {
-                handleUpload() {
-                   
-                },
-                showPerson(){
-                    
-                },
-            },
-            watch: {
-                msg() {
-                    if(this.msg == ''){
-                        return;
-                    }
-                    alert(this.msg);
-                    this.msg = '';
-                }
-            }
-
-
+            template:`<div id="app-10"> </div>`
         })
+
+        
     </script>
 </body>
 
