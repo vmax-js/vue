@@ -12,102 +12,38 @@
 </head>
 
 <body>  
-        <!-- @enlarge-text="postFontSize += $event" -->
-
     <div id="app">
-        <!-- <div :style="{fontSize:postFontSize + 'em'}">
-            <blog-post v-for="post in posts" :post="post" :key='post.id'
-                
-            
-               @click.native="postFontSize += 0.1"
-            >
-            </blog-post>
-        </div>
-         -->
-         <base-input :checked.sync="checked">
-
-        </base-input>
-        
-    </div>
+        <test>
+            <template v-slot:header>
+                <h1>头部</h1>
+            </template>
+            <template v-slot:default>
+                <p>内容</p>
+            </template>
+            <template v-slot:footer>
+                <p>底部</p>
+            </template>
+        </test>
+    </div> 
     
-
     <script>
-        // Vue.component('blog-post', {
-        //     props:{
-        //        post:Object
-        //     },
-        //     template: `
-        //     <div>
-        //         <h3>{{ post.title }}</h3>
-        //         <button @click="$emit('enlarge-text',0.3)">放大</button>
-        //         <div>{{ post.content }}</div>
-        //     </div>
-        //     `
-        // })
-        // const vm = new Vue({
-        //     el: '#app',
-        //     data:{
-        //         postFontSize: 1,
-        //         posts:[{
-        //             title:'震惊',
-        //             content:'老毕吃💩了',
-        //             id:0
-        //         },{
-        //             title:'抖音',
-        //             content:'xxxx',
-        //             id:1
-        //         },{
-        //             title:'快手',
-        //             content:'sdfsdf',
-        //             id:2
-        //         },{
-        //             title:'b站',
-        //             content:'dfsdfds',
-        //             id:3
-        //         }]
-        //     },
-        //     methods:{
-        //         fun(par){
-        //             console.log(par);
-        //             this.postFontSize += par;
-        //         }
-        //     }
-        // })
-
-        Vue.component('base-input',{
-            // mounted(){
-            //     console.log(this.$listeners)
-            // },
-            model:{
-                prop:'checked',
-                event:'change'
-            },  
-            props:{
-                checked:Boolean
-            },
+        Vue.component('test',{
             template:`
-                <label>
-                    姓名：
-                <input type="checkbox" :checked="checked"/>
-                </label>
+                <div class="container">
+                    <header>
+                        <slot name="header"></slot>    
+                    </header>
+                    <main>
+                        <slot></slot>    
+                    </main>
+                    <footer>
+                        <slot name="footer"></slot>
+                    </footer>
+                </div>
             `
-        })
+        });
         const vm = new Vue({
-           
-            el:'#app',
-            methods:{
-                onFocus(){
-                    console.log('onfocus')
-                },
-                onBlur(){
-                    console.log('onblur');
-                }
-            },
-            data:{
-                name:'',
-                checked:true
-            }
-
+            el:'#app'
         })
     </script>
 </body>
