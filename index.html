@@ -13,43 +13,28 @@
 
 <body>
     <div id="app">
-        <my-cmp ></my-cmp>
+        {{count}}
+        <button @click="count++">father点击加1</button>
+        <my-cmp :count='count'></my-cmp>
     </div>
     
     <script>
         Vue.component('my-cmp',{
-            props:{
-                list:{
-                    type:Array,
-                    default(){
-                        return [{
-                            name:"tan"
-                        },{
-                            name:'fdf'
-                        }]
-                    },
-                    // required:true,
-                    validator(prop){
-                        return prop.length > 2;
-                    }
-                }
-            },
+            props:['count'],
             template:`
-            <ul>
-                <li v-for="person in list">{{person.name}}</li>
-            </ul>
+            <div>
+                {{count}}
+                <button @click="count++">点击加1</button>
+            </div>
             `
         })
-       const vm = new Vue({
-           el: '#app',
-           data:{
-            list:[{
-                name:'谭彪'
-            },{
-                name:'老毕'
-            }]
-           }
-       })
+        const vm = new Vue({
+            el:'#app',
+            data:{
+                count:0
+            }
+
+        })
         
     </script>
 </body>
