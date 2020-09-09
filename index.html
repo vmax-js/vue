@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="./index.css">
     <script src="./vue.js"></script>
     <script src="./axios.js"></script>
 
@@ -14,79 +13,44 @@
 
 <body>
     <div id="app">
-        <video-list :video-list="videoList">
-
-        </video-list>
-        <!-- <video-item
-            v-for="video in videoList"
-            :poster="video.poster"
-            :rank='video.rank'
-            :play="video.play"
-            :title="video.title"
-            :key="video.id"
-        ></video-item> -->
+        <my-cmp ></my-cmp>
     </div>
-
-
+    
     <script>
-       
-        Vue.component('video-item', {
-            props: ['poster', 'play', 'rank', 'title'],
-            template: `
-            <div class="video-item">
-                <div class="poster">
-                    <img :src="poster" alt="">
-                    <div class="info">
-                        <div class="play">{{ play }}</div>
-                        <div class="rank">{{ rank }}</div>
-                    </div>
-                </div>
-                <div class="title">{{ title }}</div>
-            </div>
-            `
-        })
-        // Vue.component('video-list',{
-        //     props:['videoList'],
-        //     template:`
-        //     <div class="video-list" >
-        //         <video-item v-for="video in videoList" 
-        //             :poster="video.poster" 
-        //             :rank='video.rank'
-        //             :play="video.play"
-        //             :title="video.title" >
-        //         </video-item>
-        //     </div>
-        //     `
-        // })
-        Vue.component('video-list',{
-            props:['videoList'],
-            template:`
-            <div class="video-list" >
-                <video-item v-for="video in videoList" 
-                    v-bind="video" >
-                </video-item>
-            </div>
-            `
-        })
-        const vm = new Vue({
-            el: '#app',
-            data: {
-                videoList: []
+        Vue.component('my-cmp',{
+            props:{
+                list:{
+                    type:Array,
+                    default(){
+                        return [{
+                            name:"tan"
+                        },{
+                            name:'fdf'
+                        }]
+                    },
+                    // required:true,
+                    validator(prop){
+                        return prop.length > 2;
+                    }
+                }
             },
-            created() {
-                axios.get('https://developer.duyiedu.com/vue/bz/video', {
-                    params: {
-                        start: 0,
-                        offset: 12
-                    }
-                }).then(res => {
-                    if (res.status === 200) {
-                        console.log(res.data);
-                        this.videoList = res.data.data;
-                    }
-                });
-            }
+            template:`
+            <ul>
+                <li v-for="person in list">{{person.name}}</li>
+            </ul>
+            `
         })
+       const vm = new Vue({
+           el: '#app',
+           data:{
+            list:[{
+                name:'谭彪'
+            },{
+                name:'老毕'
+            }]
+           }
+       })
+        
     </script>
 </body>
 
