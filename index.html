@@ -7,43 +7,97 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="./vue.js"></script>
-    <script src="./axios.js"></script>
 
 </head>
 
-<body>  
+<body>
     <div id="app">
-        <test>
-            <template v-slot:header>
-                <h1>头部</h1>
-            </template>
-            <template v-slot:default>
-                <p>内容</p>
-            </template>
-            <template v-slot:footer>
-                <p>底部</p>
-            </template>
-        </test>
-    </div> 
-    
+        <!-- <component is="my-cmp-a"></component>  -->
+        <button v-for="page in pages" 
+            :key="page.id" 
+            @click="cmpPage = page.cmp"
+        >{{page.name}}
+        </button>
+        <keep-alive>
+            <component :is="cmpPage"></component>
+        </keep-alive>
+    </div>
+
     <script>
-        Vue.component('test',{
-            template:`
-                <div class="container">
-                    <header>
-                        <slot name="header"></slot>    
-                    </header>
-                    <main>
-                        <slot></slot>    
-                    </main>
-                    <footer>
-                        <slot name="footer"></slot>
-                    </footer>
+        Vue.component('cmp-more', {
+            activated(){
+                console.log('cmp-more activated');
+            },
+            deactivated(){
+                console.log('cmp-more deactivated');
+            },
+            template: `
+                <div>cmp-more</div>
+            `
+        })
+        Vue.component('cmp-post', {
+            data() {
+                return {
+                    postCmp: '',
+                    posts: [{
+                        title: '标题1',
+                        content: {
+                            template: `<div>内容1</div>`
+                        },
+                        id: 11
+                    }, {
+                        title: '标题2',
+                        content: {
+                            template: `<div>内容2</div>`
+                        },
+                        id: 12
+                    }, {
+                        title: '标题3',
+                        content: {
+                            template: `<div>内容3</div>`
+                        },
+                        id: 13
+                    }]
+                }
+            },
+           
+            created() {
+                this.postCmp = this.posts[0].content;
+            },
+             // 组件激活
+            activated(){
+                console.log('cmp-post activated');
+            },
+            // 组件停用
+            deactivated(){
+                console.log('cmp-post deactivated');
+            },
+            template: `
+                <div>
+                    <button v-for="post in posts" 
+                        :key="post.id"
+                        @click="postCmp = post.content"
+                    >{{post.title}}</button>
+                    <keep-alive>    
+                        <component :is="postCmp"></component>
+                    </keep-alive>
                 </div>
             `
-        });
+        })
         const vm = new Vue({
-            el:'#app'
+            el: '#app',
+            data: {
+                cmpPage: 'cmp-post',
+                pages: [{
+                    name: '博客',
+                    cmp: 'cmp-post',
+                    id: 0
+                }, {
+                    name: '更多',
+                    cmp: "cmp-more",
+                    id: 1
+                }]
+            }
         })
     </script>
 </body>
