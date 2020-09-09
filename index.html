@@ -12,62 +12,67 @@
 
 <body>
     <div id="app">
-       {{ msg }}
+        <tscn></tscn>
+        <tscn-1></tscn-1>
+        <my-component></my-component>
+        <MyComponent></MyComponent>
     </div>
+   <div id="app1">
+        <tscn></tscn>
+   </div>
     <script>
-        const vm = new Vue({
-            el: '#app',
-            data:{
-                msg:'hell word'
-            },
-            watch:{
-                msg:{
-                    handler(){
-                        console.log('监听');
+        // 全局组件
+        // Vue.component('tscn',{
+        //     data(){
+        //         return {
+        //             count:0
+        //         }
+        //     },
+        //     template:` <button @click="count++">点击了{{count}}次</button>`
+        // });
+        // const vm = new Vue({
+        //     el: '#app',
+        // });
+        
+        // // 局部组件
+        // const vm = new Vue({
+        //     el: '#app',
+        //     components:{
+        //         'tscn':{
+        //             data(){
+        //                 return {
+        //                     count:0
+        //                 }
+        //             },
+        //             template:` <button @click="count++">点击了{{count}}次</button>`
+        //         }
+        //     }
+        // })
+            Vue.component('tscn',{
+                template:"<div>我是一个全局组件</div>"
+            })
+            Vue.component('my-component',{
+                template:'<div>我是my-component</div>'
+            });
+            Vue.component('MyComponent',{
+                template:'<div>我是MyComponet</div>'
+            })
+            const vm = new Vue({
+                el: '#app',
+                components:{
+                    'tscn-1':{
+                        template:'<div>我是一个局部组件</div>'
                     }
-                }
-            },
-            beforeCreate(){
-                console.log(this.msg);
-                console.log('-----beforeCreate----');
-            },
-            created(){
-                console.log(this.msg);
-                this.msg = 'tan';
-                console.log('----created-----');
-            },
-            beforeMount(){
-                console.log(this.$el.outerHTML);
-                console.log('----beforeMount---')
-            },
-            mounted(){
-                console.log(this.$el.outerHTML);
-                console.log('----mount---')
-            },
-            beforeUpdate(){
-                console.log(this.msg);
-                console.log(this.$el);
-                console.log('------beforeUpdate----')
-            },
-            updated(){
-                console.log(this.msg);
-                console.log(this.$el);
-                console.log('----updated')
-            },
-            beforeDestory(){
+                },
+                template:`<div id='app'>
+                <div>
+                wepprpwep</div>
+                </div>`
+            });
+            const vm1 = new Vue({
+                el:'#app1'
+            });
 
-            },
-            destoryed(){
-                
-            }
-
-
-
-
-
-
-        })
-        vm.msg = 'dfdf';        
     </script>
 </body>
 
