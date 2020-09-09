@@ -6,73 +6,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
     <script src="./vue.js"></script>
-   
+    <script src="./axios.js"></script>
+
 </head>
 
 <body>
     <div id="app">
-        <tscn></tscn>
-        <tscn-1></tscn-1>
-        <my-component></my-component>
-        <MyComponent></MyComponent>
-    </div>
-   <div id="app1">
-        <tscn></tscn>
-   </div>
-    <script>
-        // 全局组件
-        // Vue.component('tscn',{
-        //     data(){
-        //         return {
-        //             count:0
-        //         }
-        //     },
-        //     template:` <button @click="count++">点击了{{count}}次</button>`
-        // });
-        // const vm = new Vue({
-        //     el: '#app',
-        // });
-        
-        // // 局部组件
-        // const vm = new Vue({
-        //     el: '#app',
-        //     components:{
-        //         'tscn':{
-        //             data(){
-        //                 return {
-        //                     count:0
-        //                 }
-        //             },
-        //             template:` <button @click="count++">点击了{{count}}次</button>`
-        //         }
-        //     }
-        // })
-            Vue.component('tscn',{
-                template:"<div>我是一个全局组件</div>"
-            })
-            Vue.component('my-component',{
-                template:'<div>我是my-component</div>'
-            });
-            Vue.component('MyComponent',{
-                template:'<div>我是MyComponet</div>'
-            })
-            const vm = new Vue({
-                el: '#app',
-                components:{
-                    'tscn-1':{
-                        template:'<div>我是一个局部组件</div>'
-                    }
-                },
-                template:`<div id='app'>
-                <div>
-                wepprpwep</div>
-                </div>`
-            });
-            const vm1 = new Vue({
-                el:'#app1'
-            });
+        <video-list :video-list="videoList">
 
+        </video-list>
+        <!-- <video-item
+            v-for="video in videoList"
+            :poster="video.poster"
+            :rank='video.rank'
+            :play="video.play"
+            :title="video.title"
+            :key="video.id"
+        ></video-item> -->
+    </div>
+
+
+    <script>
+       
+        Vue.component('video-item', {
+            props: ['poster', 'play', 'rank', 'title'],
+            template: `
+            <div class="video-item">
+                <div class="poster">
+                    <img :src="poster" alt="">
+                    <div class="info">
+                        <div class="play">{{ play }}</div>
+                        <div class="rank">{{ rank }}</div>
+                    </div>
+                </div>
+                <div class="title">{{ title }}</div>
+            </div>
+            `
+        })
+        // Vue.component('video-list',{
+        //     props:['videoList'],
+        //     template:`
+        //     <div class="video-list" >
+        //         <video-item v-for="video in videoList" 
+        //             :poster="video.poster" 
+        //             :rank='video.rank'
+        //             :play="video.play"
+        //             :title="video.title" >
+        //         </video-item>
+        //     </div>
+        //     `
+        // })
+        Vue.component('video-list',{
+            props:['videoList'],
+            template:`
+            <div class="video-list" >
+                <video-item v-for="video in videoList" 
+                    v-bind="video" >
+                </video-item>
+            </div>
+            `
+        })
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                videoList: []
+            },
+            created() {
+                axios.get('https://developer.duyiedu.com/vue/bz/video', {
+                    params: {
+                        start: 0,
+                        offset: 12
+                    }
+                }).then(res => {
+                    if (res.status === 200) {
+                        console.log(res.data);
+                        this.videoList = res.data.data;
+                    }
+                });
+            }
+        })
     </script>
 </body>
 
