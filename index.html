@@ -12,28 +12,24 @@
 </head>
 
 <body>
+
     <div id="app">
-        {{count}}
-        <button @click="count++">father点击加1</button>
-        <my-cmp :count='count'></my-cmp>
+        <my-cmp type = 'radio' a=1 b=10 class="my-cmp" style="color: red;"></my-cmp>
     </div>
     
     <script>
         Vue.component('my-cmp',{
-            props:['count'],
+            props:['a'],
+            inheritAttrs:false,
             template:`
-            <div>
-                {{count}}
-                <button @click="count++">点击加1</button>
-            </div>
+            <label class="label" style="font-size:32px">
+                选择：
+                <input v-bind="$attrs"/>
+            </label>
             `
         })
         const vm = new Vue({
-            el:'#app',
-            data:{
-                count:0
-            }
-
+            el:'#app'
         })
         
     </script>
