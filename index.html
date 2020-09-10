@@ -7,31 +7,180 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="./vue.js"></script>
-    <script src="./axios.js"></script>
 
 </head>
 
 <body>
 
     <div id="app">
-        <my-cmp type = 'radio' a=1 b=10 class="my-cmp" style="color: red;"></my-cmp>
+        <!-- <my-cmp v-focus>p</my-cmp> -->
+        <!-- <input type="text" v-focus='name' v-if='show'> -->
+        <!-- <input type="text" v-myshow='show'> -->
+        <!-- <input type="text" v-mymodel="content">{{ content }} -->
+        <input type="text" v-slice:[slicenumber].number="content">{{content}}
     </div>
-    
+
     <script>
-        Vue.component('my-cmp',{
-            props:['a'],
-            inheritAttrs:false,
-            template:`
-            <label class="label" style="font-size:32px">
-                选择：
-                <input v-bind="$attrs"/>
-            </label>
+        Vue.directive('focus', {
+            bind(el, binding) {
+                console.log(el);
+                console.log(binding)
+                console.log('bind');
+            },
+            inserted(el) {
+                console.log(el);
+                el.focus();
+                console.log('inserted');
+            },
+            update() {
+                console.log('update');
+            },
+            componentUpdated() {
+                console.log('componentUpdated');
+            },
+            unbind() {
+                console.log('unbind');
+            }
+        })
+        Vue.component('my-cmp', {
+
+            template: `
+                <input type='text'/>
             `
         })
-        const vm = new Vue({
-            el:'#app'
+
+        Vue.directive('myshow', {
+            bind(el, binding) {
+                const {
+                    value
+                } = binding;
+                let display = value ? '' : 'none'
+                el.style.display = display;
+            },
+            update(el, binding) {
+                const {
+                    value
+                } = binding;
+                let display = value ? '' : 'none'
+                el.style.display = display;
+            }
         })
-        
+
+        Vue.directive('mymodel', {
+            bind(el, binding, vnode) {
+                // console.log(binding);
+                const {
+                    value,
+                    expression,
+                    modifiers
+                } = binding;
+                // if(modifiers)
+                const context = vnode.context;
+                // console.log(context);
+                el.value = value;
+                el.oninput = function () {
+                    context[expression] = el.value;
+                }
+            },
+            update(el, binding, vnode) {
+                // const {value,expression} = binding;
+                // const context = vnode.context;
+                // el.value = context[expression];
+                const {
+                    value
+                } = binding;
+                console.log(value);
+                el.value = value;
+            }
+        })
+        // v-slice:5.number
+        Vue.directive('slice',(el,binding,vnode) =>{
+            let {
+                    value,
+                    arg,
+                    expression,
+                    modifiers
+                } = binding;
+                const {context} = vnode;
+                
+                // console.log(value);
+                if(typeof value === 'number'){
+                    value = String(value);
+                }
+                if(modifiers.number){
+                    value = value.replace(/[^0-9]/g,'');
+                }
+                el.value = value.slice(0, arg);
+                context[expression] = value.slice(0,arg);
+                el.oninput = function () {
+                    let {value} = el;
+                    context[expression] = value.slice(0, arg);
+                    el.value = value.slice(0, arg);
+                }
+        }
+        // {
+        //     bind(el, binding, vnode) {
+        //         // console.log(binding);
+        //         let {
+        //             value,
+        //             expression,
+        //             arg=5,
+        //             modifiers
+        //         } = binding;
+        //         // console.log(vnode);
+        //         // console.log(modifiers);
+        //         if(modifiers.number){
+        //             value = value.replace(/[^0-9]/g,'');
+        //         }
+
+        //         const context = vnode.context;
+        //         // console.log(context);
+        //         el.value = value.slice(0, arg);
+        //         context[expression] = el.value.slice(0, arg);
+
+                
+        //     },
+        //     update(el, binding, vnode) {
+        //         // const {value,expression} = binding;
+        //         // const context = vnode.context;
+        //         // el.value = context[expression];
+        //         let {
+        //             value,
+        //             arg,
+        //             expression,
+        //             modifiers
+        //         } = binding;
+        //         const {context} = vnode;
+                
+        //         // console.log(value);
+        //         if(typeof value === 'number'){
+        //             value = String(value);
+        //         }
+        //         if(modifiers.number){
+        //             value = value.replace(/[^0-9]/g,'');
+        //         }
+        //         el.value = value.slice(0, arg);
+        //         context[expression] = value.slice(0,arg);
+        //         el.oninput = function () {
+        //             let {value} = el;
+        //             context[expression] = value.slice(0, arg);
+        //             el.value = value.slice(0, arg);
+
+        //         }
+        //     }
+        // }
+        )
+
+        const vm = new Vue({
+
+            el: '#app',
+            data: {
+                name: 'tscn',
+                show: true,
+                content: 'tscndfdf',
+                slicenumber:5
+            }
+        })
     </script>
 </body>
 
