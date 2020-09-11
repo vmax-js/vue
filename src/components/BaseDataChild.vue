@@ -1,5 +1,8 @@
 <template>
-    <div class="child">{{ name }}</div>
+    <div class="child">{{ name }}
+        <slot name='child'></slot>
+        <slot></slot> 
+    </div>
 </template>
 <script>
 export default {

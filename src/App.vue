@@ -8,17 +8,23 @@
     <base-level :level="5">标题</base-level>
     <base-level :level="6">标题</base-level> -->
     <base-data></base-data>
+    <!-- <base-if></base-if> -->
+    <base-slots v-slot="slotProps">
+      {{slotProps.text}}
+    </base-slots>
   </div>
 </template>
 
 <script>
 import  BaseLevel  from "./components/BaseLevel";
 import  BaseData from "./components/BaseData";
+import BaseSlots from "./components/BaseSlots";
 export default {
   name: "app",
   components: {
     BaseLevel,
-    BaseData
+    BaseData,
+    BaseSlots
   }
 };
 </script>
