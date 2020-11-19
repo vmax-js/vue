@@ -1,23 +1,28 @@
 <template>
-    <div id="app">
-        <date-picker :date="date"></date-picker>
-    </div>
+  <div>
+    App.vue
+    {{ msg }}
+    <base-son/>
+  </div>
 </template>
 
+
 <script>
-import DatePicker from "./DatePicker";
+import baseSon from "./son";
 export default {
-    components:{
-        DatePicker
-    },
-    data(){
-        return {
-            date: new Date()
-        }
-    }
-}
+  components: {
+      baseSon
+  },
+  data() {
+    return {
+      msg: "hello App"
+    };
+  },
+};
 </script>
 
 <style scoped>
-
+div {
+  background: red;
+}
 </style>
