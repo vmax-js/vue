@@ -1,27 +1,23 @@
 <template>
-    <div>
-        xxx
-        {{ msg }}
-        <base-son/>
+    <div id="app">
+        <date-picker :date="date"></date-picker>
     </div>
 </template>
 
 <script>
-import baseSon from './Son';
+import DatePicker from "./DatePicker";
 export default {
     components:{
-        baseSon
+        DatePicker
     },
     data(){
         return {
-            msg: "我是爸爸"
+            date: new Date()
         }
     }
 }
 </script>
 
 <style scoped>
-div{
-    color: red;
-}
+
 </style>
