@@ -1,28 +1,28 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" class="app">
+      <!-- <base-level :level="1">标题</base-level>
+      <base-level :level="2">标题</base-level>
+      <base-level :level="3">标题</base-level>
+      <base-level :level="4">标题</base-level>
+      <base-level :level="5">标题</base-level>
+      <base-level :level="6">标题</base-level> -->
+      <base-date></base-date>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import BaseLevel from './components/baseLevel.vue'
+import BaseDate from './components/baseDate.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    name:'app',  
+    components:{
+      BaseLevel,
+      BaseDate,
+    }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
+
 </style>
