@@ -23,5 +23,7 @@ const routes = [{
     component: () => import('./views/About')
 }]
 export default new VueRouter({
-    routes
+    routes,
+    // 模式 http://localhost:8080/about
+    mode:'history'
 })
