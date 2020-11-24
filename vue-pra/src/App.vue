@@ -4,7 +4,7 @@
     <div class="nav">
       <div class="logo">TSCN社区</div>
       <div class="text">
-        <router-link to="/" tag="a">Home</router-link>
+        <router-link to="/home" tag="a">Home</router-link>
         <router-link to="/learn">Learn</router-link>
         <router-link to="/student">Student</router-link>
         <router-link to="/activity">Activity</router-link>
@@ -46,13 +46,20 @@ export default {
   color: aliceblue;
   margin-right: 60px; 
 }
-.nav .text a.router-link-exact-active{
+/* .nav .text a.router-link-exact-active{
+  font-weight: bolder;
+  border: 1px solid white;
+  border-radius: 20%; 
+} */
+
+/* 为了activity选中有样式 */
+.nav .text a.router-link-active{
   font-weight: bolder;
   border: 1px solid white;
   border-radius: 20%; 
 }
 #app .content{
   margin-top: 30px; 
-  padding-left:200px; 
+  padding: 0px 200px; 
 }
 </style>
