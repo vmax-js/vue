@@ -12,6 +12,7 @@ const routes = [{
     {
         // 根路径
         path: '/home',
+        name:'home',
         component: Home,
         // 别名
         // alias:'/'
@@ -25,7 +26,8 @@ const routes = [{
         component: () => import('./views/Student')
     }, {
         path: '/activity',
-        component: () => import('./views/Activity'),
+        // 合并异步组件 webpack
+        component: () => import(/* webpackChunkName:'activity'*/'./views/Activity'),
         // 重定向和空路径不要同时写 第一种写法 将exact改为active
         // redirect:'/activity/acdemic',
 
@@ -54,7 +56,7 @@ const routes = [{
                 path: 'acdemic',
                 // 命名路由
                 name: 'acdemic',
-                component: () => import('./views/Acdemic')
+                component: () => import(/* webpackChunkName:'activity'*/'./views/Acdemic')
             }, {
                 path: 'download',
                 name: 'download',
