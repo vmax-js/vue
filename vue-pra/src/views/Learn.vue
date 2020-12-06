@@ -1,7 +1,7 @@
 <template>
     <div class="learn">
         课程学习
-        <base-question :id="87900901"></base-question>
+        <base-question :id="87900901" name='question'></base-question>
     </div>
 </template>
 
