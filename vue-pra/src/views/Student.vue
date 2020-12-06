@@ -6,16 +6,16 @@
 
 <script>
 export default {
-    beforeRouteEnter(to,from,next){
-        // 没有this
-        // 可以发送请求
+    // beforeRouteEnter(to,from,next){
+    //     // 没有this
+    //     // 可以发送请求
     
-        // vm相当于this
-        next(vm=>{
-            console.log(vm.$axios)
-            console.log(vm.name)
-        });
-    },
+    //     // vm相当于this
+    //     next(vm=>{
+    //         // console.log(vm.$axios)
+    //         // console.log(vm.name)
+    //     });
+    // },
     data(){
         return {
             name:'Tscn'

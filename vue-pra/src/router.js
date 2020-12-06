@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from './views/Home'
-
+import auth from './utils/auth'
 Vue.use(VueRouter);
 
 const routes = [{
@@ -30,6 +30,10 @@ const routes = [{
         component: () => import('./views/Student')
     }, {
         path: '/activity',
+        meta: {
+            isRequireLogin: true,
+            backAsk: true
+        },
         // 合并异步组件 webpack
         component: () => import( /* webpackChunkName:'activity'*/ './views/Activity'),
         // 重定向和空路径不要同时写 第一种写法 将exact改为active
@@ -60,7 +64,10 @@ const routes = [{
                 path: 'acdemic',
                 // 命名路由
                 name: 'acdemic',
-                component: () => import( /* webpackChunkName:'activity'*/ './views/Acdemic')
+                component: () => import( /* webpackChunkName:'activity'*/ './views/Acdemic'),
+                // meta:{
+                //     backAsk:true
+                // }
             }, {
                 path: 'download',
                 name: 'download',
@@ -75,9 +82,13 @@ const routes = [{
         path: '/about',
         component: () => import('./views/About'),
         // 独享守卫
-        beforeEnter:(to,from,next)=>{
-            console.log('独享守卫')
-            next();
+        // beforeEnter: (to, from, next) => {
+        //     console.log('独享守卫')
+        //     next();
+        // },
+        meta: {
+            isRequireLogin: true,
+            backAsk: true
         }
     }, {
         path: '/question/:id',
@@ -89,6 +100,10 @@ const routes = [{
             id: route.params.id
         }),
         component: () => import('./views/Question')
+    },
+    {
+        path: '/login',
+        component: () => import('./views/Login')
     }
 ]
 const router = new VueRouter({
@@ -97,36 +112,68 @@ const router = new VueRouter({
     mode: 'history'
 })
 
-router.beforeEach((to,from,next) => {
-    // 目标
-    // console.log(to);
-    // 开始位置
-    // console.log(from);
-    // 跳转
-    console.log('beforeEach')
-    next();
-    // 不跳转
-    // next(false)
+// router.beforeEach((to,from,next) => {
+//     // 目标
+//     // console.log(to);
+//     // 开始位置
+//     // console.log(from);
+//     // 跳转
+//     console.log('beforeEach')
+//     next();
+//     // 不跳转
+//     // next(false)
 
-    // if(to.path == '/student'){
-    //     next('/home');
-    //     // this.$router.push()
-    // } else {
-    //     next();
-    // }
+//     // if(to.path == '/student'){
+//     //     next('/home');
+//     //     // this.$router.push()
+//     // } else {
+//     //     next();
+//     // }
 
-    // next(new Error('不让跳转'))
-    
-})
+//     // next(new Error('不让跳转'))
 
-router.beforeResolve((to, from,next)=>{
-    console.log('beforeResolve');
-    next();
-   
-})
+// })
 
-router.afterEach((to,from)=>{
+// router.beforeResolve((to, from, next) => {
+//     console.log('beforeResolve');
+//     next();
+// })
 
+// router.afterEach((to, from) => {
+
+// })
+
+router.beforeEach((to, from, next) => {
+    // console.log(to.matched.some(item=>item.meta.isRequireLogin));
+    // console.log(to.meta.isRequireLogin);
+    const isReLogin = to.matched.some(item => item.meta.isRequireLogin);
+    if (isReLogin) {
+        // 判断是否登陆
+        const isLogin = auth.isLogin();
+        if (isLogin) {
+            next();
+        } else {
+            const reLogin = window.confirm('请登录！');
+            if (reLogin) {
+                next('/login');
+            } else {
+                next(false);
+            }
+        }
+
+
+        next(false);
+    } else {
+        next();
+    }
+
+    // 离开
+    const isBack = from.meta.backAsk;
+    console.log(isBack);
+    if (isBack) {
+        const is = window.confirm('真的要走吗？');
+        is ? next() : next(false);
+    }
 })
 
 export default router;

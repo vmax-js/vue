@@ -22,10 +22,9 @@ export default {
     id: {
       type: [String, Number]
     },
-    name:{
-        type:[String],
-        default:'question'
-        
+    name: {
+      type: [String],
+      default: "question"
     }
   },
   data() {
@@ -62,7 +61,7 @@ export default {
   },
   methods: {
     handleClick(id) {
-    //   const { name } = this.$route;
+      //   const { name } = this.$route;
       this.$router.push({
         name: "question",
         // name,
@@ -72,8 +71,8 @@ export default {
       });
     },
     getData() {
-    //   const { id } = this.$route.params;
-    const { id } = this;
+      //   const { id } = this.$route.params;
+      const { id } = this;
       this.$axios.get(`question/${id}`).then(res => {
         this.questionObj = res;
         //   console.log(this.questionObj);
@@ -81,13 +80,17 @@ export default {
     }
   },
   watch: {
-    "$route": {
+    $route: {
       handler() {
         this.getData();
       },
       //  立即执行
-        immediate: true
+      immediate: true
     }
+  },
+  beforeRouteLeave(to, from, next) {
+    const isGo = window.confirm("真的要离开吗？");
+    isGo ? next() : next(false);
   }
 };
 </script>
