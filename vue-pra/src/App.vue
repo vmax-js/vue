@@ -18,6 +18,7 @@
     <!-- 实习面试问到过 渲染不同路由的内容 -->
     <div class="content">
       <router-view></router-view>
+      <router-view name="student"></router-view>
     </div>
   </div>
 </template>

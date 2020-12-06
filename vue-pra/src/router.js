@@ -5,14 +5,14 @@ import Home from './views/Home'
 Vue.use(VueRouter);
 
 const routes = [{
-    path:'/',
-    // 重定向
-    redirect:'/home'
-},
+        path: '/',
+        // 重定向
+        redirect: '/home'
+    },
     {
         // 根路径
         path: '/home',
-        name:'home',
+        name: 'home',
         component: Home,
         // 别名
         // alias:'/'
@@ -20,14 +20,18 @@ const routes = [{
     {
         path: '/learn',
         // 异步组件 当我们点击的时候才会去加载渲染
-        component: () => import('./views/Learn.vue')
+        // component: () => import('./views/Learn.vue')
+        components: {
+            default:()=>import('./views/Learn.vue'),
+            student: () => import('./views/Student.vue')
+        }
     }, {
         path: '/student',
         component: () => import('./views/Student')
     }, {
         path: '/activity',
         // 合并异步组件 webpack
-        component: () => import(/* webpackChunkName:'activity'*/'./views/Activity'),
+        component: () => import( /* webpackChunkName:'activity'*/ './views/Activity'),
         // 重定向和空路径不要同时写 第一种写法 将exact改为active
         // redirect:'/activity/acdemic',
 
@@ -37,10 +41,10 @@ const routes = [{
         // },
 
         // 第三种写法 函数
-        redirect:(to)=>{
+        redirect: (to) => {
             // console.log(to);
-            return{
-                name:'acdemic'
+            return {
+                name: 'acdemic'
             }
         },
         // 嵌套路由
@@ -56,7 +60,7 @@ const routes = [{
                 path: 'acdemic',
                 // 命名路由
                 name: 'acdemic',
-                component: () => import(/* webpackChunkName:'activity'*/'./views/Acdemic')
+                component: () => import( /* webpackChunkName:'activity'*/ './views/Acdemic')
             }, {
                 path: 'download',
                 name: 'download',
@@ -70,10 +74,16 @@ const routes = [{
     }, {
         path: '/about',
         component: () => import('./views/About')
-    },{
-        path:'/question/:id',
-        name:'question',
-        component:() => import('./views/Question')
+    }, {
+        path: '/question/:id',
+        name: 'question',
+        // 组件传参
+        // props: true,
+        props:(route)=>({
+            name:route.name,
+            id:route.params.id
+        }),
+        component: () => import('./views/Question')
     }
 ]
 export default new VueRouter({
