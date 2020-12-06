@@ -22,7 +22,7 @@ const routes = [{
         // 异步组件 当我们点击的时候才会去加载渲染
         // component: () => import('./views/Learn.vue')
         components: {
-            default:()=>import('./views/Learn.vue'),
+            default: () => import('./views/Learn.vue'),
             student: () => import('./views/Student.vue')
         }
     }, {
@@ -73,21 +73,60 @@ const routes = [{
         ]
     }, {
         path: '/about',
-        component: () => import('./views/About')
+        component: () => import('./views/About'),
+        // 独享守卫
+        beforeEnter:(to,from,next)=>{
+            console.log('独享守卫')
+            next();
+        }
     }, {
         path: '/question/:id',
         name: 'question',
         // 组件传参
         // props: true,
-        props:(route)=>({
-            name:route.name,
-            id:route.params.id
+        props: (route) => ({
+            name: route.name,
+            id: route.params.id
         }),
         component: () => import('./views/Question')
     }
 ]
-export default new VueRouter({
+const router = new VueRouter({
     routes,
     // 模式 http://localhost:8080/about
     mode: 'history'
 })
+
+router.beforeEach((to,from,next) => {
+    // 目标
+    // console.log(to);
+    // 开始位置
+    // console.log(from);
+    // 跳转
+    console.log('beforeEach')
+    next();
+    // 不跳转
+    // next(false)
+
+    // if(to.path == '/student'){
+    //     next('/home');
+    //     // this.$router.push()
+    // } else {
+    //     next();
+    // }
+
+    // next(new Error('不让跳转'))
+    
+})
+
+router.beforeResolve((to, from,next)=>{
+    console.log('beforeResolve');
+    next();
+   
+})
+
+router.afterEach((to,from)=>{
+
+})
+
+export default router;
