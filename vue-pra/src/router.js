@@ -169,7 +169,7 @@ router.beforeEach((to, from, next) => {
 
     // 离开
     const isBack = from.meta.backAsk;
-    console.log(isBack);
+    // console.log(isBack);
     if (isBack) {
         const is = window.confirm('真的要走吗？');
         is ? next() : next(false);

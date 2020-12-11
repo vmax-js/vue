@@ -1,51 +1,112 @@
-# VueRouter_过渡动效-滚动行为
+# vuex
 
-## 过渡动效
+共享状态（数据）管理工具
 
-是基本的动态组件，所以我们可以用 组件给它添加一些过渡效果。
+## 安装
+```npm i vuex```
 
+## 在vue中使用
+在main.js中进行配置
 ```js
-<transition>
-  <router-view></router-view>
-</transition>
-```
-
-## 滚动行为
-
-使用前端路由，当切换到新路由时，想要页面滚到顶部，或者是保持原先的滚动位置，就像重新加载页面那样。vue-router 可以自定义路由切换时页面如何滚动。
-
-注意: 这个功能只在支持 history.pushState 的浏览器中可用.
-
-当创建一个 Router 实例，你可以提供一个 scrollBehavior 方法：
-
-```js
-const router = new VueRouter({
-  routes: [...],
-  scrollBehavior (to, from, savedPosition) {
-    // return 期望滚动到哪个的位置
+import Vuex from 'vuex';
+Vue.use(Vuex);
+const store = new Vuex.Store({
+  state:{
+    // 状态（数据）
+    count:0
   }
-})
+});
+new Vue({
+  router,
+  store,
+  render: h => h(App),
+}).$mount('#app')
 ```
 
-scrollBehavior 方法接收 to 和 from 路由对象。第三个参数 savedPosition 当且仅当 popstate 导航 (通过浏览器的 前进/后退 按钮触发) 时才可用。
+配置好了之后，可以借助vue-devtool工具在浏览器中查看
 
-scrollBehavior 返回滚动位置的对象信息，长这样：
+F12打开控制台，vue-》vuex
 
-- { x: number, y: number }
-- { selector: string, offset? : { x: number, y: number }} (offset 只在 2.6.0+ 支持)
+- 一般会将vuex的配置放在store.js中，然后在main.js中引入
 
-```js
-scrollBehavior (to, from, savedPosition) {
-  return { x: 0, y: 0 }
-}
-```
+store.js中的配置
 
 ```js
-scrollBehavior (to, from, savedPosition) {
-  if (to.hash) {
-    return {
-      selector: to.hash // selector 的 值为 hash值
+import Vue from 'vue';
+import Vuex from 'vuex';
+Vue.use(Vuex);
+const store = new Vuex.Store({
+    state:{
+        count:0
     }
-  }
-}
+})
+export default store;
+```
+
+## 在组件中获得vuex的状态（数据）
+
+在配置中```Vue.use(Vuex)```后，将状态跟随组件注入到每一个子组件中
+
+子组件能通过```this.$store```访问vuex的状态
+
+```this.$store```为一个对象,里面有很多函数
+
+```this.$store.state```就是我们配置的状态
+
+```this.$store.state.count```获取具体的状态
+
+```组件中改变了状态，那么也会影响到使用到这个状态的组件```
+
+### 在视图中使用
+
+直接```{{ $store.state.count }} ```
+
+这样写会一长串，那么可以将其作为组件的自己的属性，利用计算属性来实现。
+
+```vue
+<template>
+  <div class="home">
+    首页
+    <button @click="$store.state.count++">点击</button>
+    <!-- {{ $store.state.count }} -->
+    {{ count }}
+  </div>
+</template>
+
+<script>
+export default {
+  computed:{
+      count(){
+          return this.$store.state.count;
+      }
+  },
+};
+</script>
+```
+
+这样写还是会造成冗余，因为状态可能有很多。
+
+vuex帮我们解决了这个问题。
+
+```js
+// 需要引入
+import { mapState } from 'vuex';
+export default {
+  computed:{
+    //   count(){
+    //       return this.$store.state.count;
+    //   }
+    // mapState(['count']) 会返回一个计算函数
+    ...mapState(['count'])
+  },
+```
+和组件中数据重名后，data的优先级高，这是需要我们重新命名，可以改data中的数据名，如果data中的数据名参与了过多的逻辑，这时可以更改mapState中的数据名
+
+```js
+mapState({
+  // 重命名的数据变量 后面是一个函数，函数第一个参数是state，函数的返回值就是变量的值
+  storeCount:(state) => state.count;
+  // 如果不需要对仓库中的状态处理的话，可以简写
+  storeCount:'count'; //(state) => state.count;
+})
 ```

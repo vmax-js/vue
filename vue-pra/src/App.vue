@@ -17,9 +17,9 @@
 
     <!-- 实习面试问到过 渲染不同路由的内容 -->
     <div class="content">
-      <transtion>
+      
         <router-view></router-view>
-      </transtion>
+     
       <!-- <router-view name="student"></router-view> -->
     </div>
   </div>

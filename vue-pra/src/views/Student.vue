@@ -1,10 +1,14 @@
 <template>
     <div class="student">
-        学生信息
+        <student-add />
+        <hr>
+        <student-list />
     </div>
 </template>
 
 <script>
+import StudentList from '@/components/StudentList.vue';
+import StudentAdd from '@/components/StudentAdd.vue';
 export default {
     // beforeRouteEnter(to,from,next){
     //     // 没有this
@@ -16,10 +20,14 @@ export default {
     //         // console.log(vm.name)
     //     });
     // },
-    data(){
-        return {
-            name:'Tscn'
-        }
+    // data(){
+    //     return {
+    //         name:'Tscn'
+    //     }
+    // }
+    components:{
+        StudentList,
+        StudentAdd
     }
 }
 </script>
