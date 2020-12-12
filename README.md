@@ -440,3 +440,78 @@ const store = new Vuex.Store({
 
 ## Action
 
+Action和mutation类似，但有两点区别：
+
+1. action不能直接变更状态，而是通过提交mutation来变更状态
+  
+2. action中可以包含任意的异步操作，而mutation不能
+
+action函数接受一个与store实例具有相同方法和属性的context对象，因此可以直接调用```context.commit```提交一个mutation，或者通过```context.getters``` 和 ```context.state```来获取getters和state
+
+```js
+const store = new Vuex.Store({
+  state:{
+    count:0
+  },
+  mutations:{
+    increment(state){
+      state.count++;
+    }
+  },
+  actions:{
+    increment(context){
+      context.commit('increment');
+    }
+  }
+})
+```
+
+那组件中怎么去使用action，这就需要分发action
+
+### 分发action
+
+```this.$store.dispatch('increment')```
+
+### 关与map
+
+- mapState 计算属性
+- mapGetters 计算属性
+- mapMutations 返回一个函数 methods
+- mapActions 返回一个函数 methods
+
+### Actions异步操作
+action提交的mutation
+```js
+actions: {
+        countIncrement(context) {
+            setTimeout(() => {
+                context.commit('increment');
+            }, 1000)
+        }
+    }
+```
+
+- 那怎么知道异步action的结束时刻，可以在actions函数里面返回一个promise。
+
+```js
+actions: {
+        countIncrement(context) {
+            return new Promise((resolve,reject) => {
+                setTimeout(() => {
+                    context.commit('increment');
+                    resolve(12);
+                }, 1000)
+            })
+           
+        }
+    }
+```
+分发的时候then一下弹出一个弹框
+
+```js
+this.$store.dispatch('countIncrement').then(res=>{
+          alert('actions结束'+res);
+      });
+```
+
+

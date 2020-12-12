@@ -49,6 +49,20 @@ const store = new Vuex.Store({
             value
         }) {
             state.msg = value;
+        },
+        increment(state) {
+            state.count++;
+        }
+    },
+    actions: {
+        countIncrement(context) {
+            return new Promise((resolve,reject) => {
+                setTimeout(() => {
+                    context.commit('increment');
+                    resolve(12);
+                }, 1000)
+            })
+           
         }
     }
 })

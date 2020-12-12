@@ -11,6 +11,7 @@
     <!-- <input :value="msg" @input="handleInput" /> -->
     <input v-model="msg"/>
     {{ msg }}
+    {{ count }}
   </div>
 </template>
 
@@ -52,11 +53,15 @@ export default {
       //     //   数据
       //       num:10
       //   });
-      this.$store.commit({
-        //   mutaion的函数名
-        type: "OBJ_B"
-      });
+    //   this.$store.commit({
+    //     //   mutaion的函数名
+    //     type: "OBJ_B"
+    //   });
       // this.countIncrement();
+
+      this.$store.dispatch('countIncrement').then(res=>{
+          alert('actions结束'+res);
+      });
     },
     handleInput(e) {
       this.$store.commit("CHANGE_MSG", { value: e.target.value });
