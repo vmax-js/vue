@@ -514,4 +514,38 @@ this.$store.dispatch('countIncrement').then(res=>{
       });
 ```
 
+## vuex-module
+之前使用的是单一状态数，应用的所有状态会集中到一个比较大的对象中。
+那么modules就是来解决这个问题的，vuex允许我们分割模块（module）。每个模块拥有自己的state，getter，mutation，action。
 
+```js
+const store = new Vuex.Store({
+  modules:{
+    module1,
+    module2
+  }
+})
+```
+```注意```
+
+1. 只有state获取时要加上面模块名，其它正常使用
+2. 获取state：```this.$store.modulesName.xxx;```
+3. 获取getter：```this.$store.getters.xxx;```
+4. 提交mutation：```this.$store.commit(xxx);```
+5. 分发actin：```this.$store.dispatch(xxx);```
+6. 可以通过mapstate，mapGetters，mapMutation，mapAction拿到对应的，但mapState拿不到，要实现的话需要命名空间。
+
+### 命名空间
+可以通过添加```namespace:true```的方式使其成为带命名空间的模块。
+
+获取state： ```this.$store.state.modulesName.xxx;```
+获取getter：```this.$store.getters['modulesName/xxx'];```
+提交mutation：```this.$store.commit('modulesName/xxx');```
+分发actin：```this.$store.dispatch('modules/xxx');```
+
+## 模块的局部状态
+- 对于模块内部的mutation和getter，接受的的第一个参数是模块的局部对象。
+  
+- 对于模块内部的action，局部状态通过context.state暴露出来，根节点为context.rootState
+
+- 对于模块内部的getter，根节点状态会作为第三个参数暴露出来
