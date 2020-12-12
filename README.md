@@ -110,3 +110,333 @@ mapState({
   storeCount:'count'; //(state) => state.count;
 })
 ```
+
+### getter
+
+getter是store的计算属性，getter的返回值会根据它的依赖被缓存起来
+且当它的依赖值发生了改变才会被重新计算。
+
+- 使用
+
+在store.js中配置
+
+```js
+const store = new Vuex.Store({
+    state:{
+        count:0,
+        studentList:[]
+    },
+    // 是复数 有多个getters，里面是函数，第一个参数是state
+    getters:{
+        doubleCount(state){
+            return state.count * 2;
+        },
+        // 可以返回一个函数
+        addCount(state){
+          return function(num){
+            return state.count + num;
+          }
+        }
+
+
+    },
+})  
+```
+
+配置好了和count一样在组件中使用，视图中可以
+{{ $store.getters.doubleCount }}
+
+- mapGetters辅助函数
+
+和mapState使用差不多
+
+在组件中引入mapGetters
+```js
+import { mapGetters } from 'vuex';
+
+
+computed:{
+    //   count(){
+    //       return this.$store.state.count;
+    //   }
+    ...mapState(['count']),
+    ...mapGetters(['addCount','doubleCount'])
+  },
+```
+
+### mutation  
+
+英文为变异，改变的意思
+
+#### vuex的严格模式下
+
+开启严格模式，仅需在创建store的时候传入 strict：true
+
+```js
+const store = new Vuex.Store({
+  //...
+  strict:true
+})
+```
+
+```在严格模式下，无论何时发生了状态变更且不是mutation函数引起的，将会抛出错误。这能保证所有的状态变更都能被调试工具跟踪到。```
+
+```更改vuex的store中的状态的唯一方法是提交mutation```
+
+vuex中的单向数据流
+
+状态 -> 视图改变 -> mutation -> 状态
+
+#### 开发环境和发布环境
+
+不要在发布环境中开启严格模式，严格模式会深度监测状态树来检测不合格的状态变更，要确保在发布环境下关闭严格模式，以避免性能的损失。
+
+```js
+const store = new Vuex.Store({
+  //...
+  strict: process.env.NODE_ENV !== 'production'
+})
+```
+### mutation使用
+在store配置中
+```js
+  mutations:{
+        countIncrement(state){
+            // 变更状态
+            state.count++;
+        }
+    }
+```
+
+在组件中提交
+
+```js
+methods:{
+      handleClick(){
+          this.$store.commit('countIncrement');
+      }
+  }
+```
+
+- mapMutation
+
+```js
+  methods:{
+      ...mapMutations('countIncrement'),
+      handleClick(){
+        //   this.$store.commit('countIncrement');
+        this.countIncrement();
+      }
+  }
+```
+
+- 为什么不在computed中使用mapMutation，它返回的是一个函数。
+
+- mutation根据提交的时候传递的参数，来改变状态
+```js
+ mutations:{
+        countIncrement(state,num){
+            // 变更状态
+            state.count += num;
+        }
+    }
+```
+```js
+methods:{
+    //   ...mapMutations('countIncrement',10),
+      handleClick(){
+        // 第二个就是要传递的参数 一般写成一个对象
+          this.$store.commit('countIncrement',
+          { 
+                num: Math.floor(Math.random()* 100;
+          }
+          );
+          // this.$store.commit('countIncrement',10);
+        // this.countIncrement();
+      }
+  }
+```
+若写成对象，那么mutations那边就要进行解构处理
+
+```js
+mutations:{
+        countIncrement(state,{num}){
+            // 变更状态
+            state.count += num;
+        }
+    }
+```
+
+commit中的第二参数，专业叫载荷(payload)。
+
+commit中的参数可以直接传一个对象
+
+```js
+this.$store.commit({
+            //   mutaion的函数名
+              type:'countIncrement',
+            //   数据
+              num:10
+          });
+```
+store.js中
+
+```js
+mutations: {
+        countIncrement(state, payload) {
+            // 变更状态
+            state.count += payload.num;
+        }
+    }
+```
+#### mutation配置文件
+
+可以将mutation的名字单独放在一个文件中，名字为大写
+
+mutation-types.js中
+```js
+export const COUNT_INCREMENT = 'COUNT_INCREMENT';
+```
+
+```js
+import {
+    COUNT_INCREMENT
+} from './mutation-types.js';
+mutations: {
+        // countIncrement(state, payload) {
+        //     // 变更状态
+        //     state.count += payload.num;
+        // }
+        [COUNT_INCREMENT](state,payload){
+            state.count += payload.num;
+        }
+    }
+```
+组件中
+```js
+this.$store.commit({
+            //   mutaion的函数名
+              type:'COUNT_INCREMENT',
+            //   数据
+              num:10
+          });
+
+```
+
+### mutation需遵守vue的响应规则
+
+当需要在对象中添加新属性的时候，应该使用,不然就视图不会刷新
+
+1. Vue.set(obj,'newProp',123);
+
+2. 以新对象替换老对象，例如
+```js
+state.obj = {...state.obj,newProp:123}
+```
+```js
+ [OBJ_B](state,payload){
+            Vue.set(state.obj,'b',2)
+            // state.obj = {...state.obj,b:2};
+        }
+```
+### 表单处理
+
+在vuex的state上使用v-model时，由于会直接更改state的值，vue会抛出错误。
+
+如果想要使用双向数据的功能，就需要自己模拟一个，如下：
+
+mutation-types.js文件中
+
+```js
+export const CHANGE_MSG = 'CHANGE_MSG';
+```
+
+```js
+import {CHANGE_MSG} from 'mutation-types.js';
+const store = new Vuex.Store({
+  state:{
+    msg:''
+  },
+  mutations:{
+    [CHANGE_MSG](state,{value}){
+      state.msg = value;
+    }
+  }
+})
+```
+
+```vue
+<template>
+  <div>
+        <input :value="msg" @input="handleInput" />{{ msg }}
+  </div>
+</template>
+
+<script>
+import {mapState} from 'vuex';
+import {CHANGE_MSG} from 'mutation-types.js';
+  export default {
+      computed:{
+        ...mapState(['msg'])
+      },
+      methods:{
+        handleInput(e){
+          this.$store.commit(CHANGE_MSG,{value: e.target.value});
+        }
+      }
+  }
+</script>
+```
+上面这种实现方法有点麻烦
+
+还可以借助计算属性中的get,set方法来实现
+```vue
+<template>
+  <div>
+        <input v-model='msg'/>{{ msg }}
+  </div>
+</template>
+
+<script>
+import {mapState} from 'vuex';
+import {CHANGE_MSG} from 'mutation-types.js';
+  export default {
+      computed:{
+        // ...mapState(['msg']);
+         msg:{
+        get(){
+            return this.$store.state.msg;
+        },
+        set(value){
+            this.$store.commit(CHANGE_MSG,{value})
+            }
+        }
+      }, 
+  }
+</script>
+```
+```js
+export const CHANGE_MSG = 'CHANGE_MSG';
+```
+
+```js
+import {CHANGE_MSG} from 'mutation-types.js';
+const store = new Vuex.Store({
+  state:{
+    msg:''
+  },
+  mutations:{
+    [CHANGE_MSG](state,{value}){
+      state.msg = value;
+    }
+  }
+})
+```
+### mutation中的函数不能是异步的
+
+- 异步会导致调试出现问题，不能追踪，vue也会报不能在mutation之外更改的错误，异步函数，将在异步队列中执行。
+
+- action会解决这个问题
+
+## Action
+
